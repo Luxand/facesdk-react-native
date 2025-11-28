@@ -2,16 +2,10 @@
   "name": "react-native-face-sdk",
   "version": "0.1.0",
   "description": "React Native wrapper for FaceSDK library",
-  "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
-  "exports": {
-    ".": {
-      "source": "./src/index.tsx",
-      "types": "./lib/typescript/src/index.d.ts",
-      "default": "./lib/module/index.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "lib/commonjs/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
   "files": [
     "src",
     "lib",

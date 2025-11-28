@@ -1205,6 +1205,7 @@ export default class FSDK {
    * @returns {void}
    */
   public static ActivateLibrary(licenseKey: string): void {
+    LuxandFaceSDK.SetParameter('environment', 'reactnative');
     return executeSDKFunction(LuxandFaceSDK.ActivateLibrary, returnVoid, licenseKey);
   }
 
@@ -1213,7 +1214,6 @@ export default class FSDK {
    * @returns {void}
    */
   public static Initialize(): void {
-    LuxandFaceSDK.SetParameter('environment', 'React-Native');
     return executeSDKFunction(LuxandFaceSDK.Initialize, returnVoid);
   }
 
