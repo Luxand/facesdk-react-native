@@ -3,7 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState, type ReactNode } from 'react';
 import type { StaticScreenProps } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { SafeAreaView, Button, StyleSheet, Text, TextInput } from "react-native";
+import { Button, StyleSheet, Text, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type EditProps = StaticScreenProps<{ face: Face }>;
 type EditNavigationProp = NativeStackNavigationProp<RootParamList, 'Edit'>;
@@ -24,7 +25,12 @@ export default function Edit({ route }: EditProps): ReactNode {
       <Text style={{ textAlign: 'center' }}>Input the name</Text>
       <TextInput
         value={name}
-        style={{ height: 40, borderColor: 'black', borderWidth: StyleSheet.hairlineWidth, margin: 10 }}
+        style={{
+          height: 40,
+          borderColor: 'black',
+          borderWidth: StyleSheet.hairlineWidth,
+          margin: 10,
+        }}
         onChangeText={setName}
       />
       <Button

@@ -1,4 +1,4 @@
-import LuxandFaceSDK from './NativeFaceSDK';
+import LuxandFaceSDK from './native';
 
 export enum ERROR {
   OK                                =  0,
@@ -129,42 +129,59 @@ export enum ON_ERROR {
   SILENT,
   /** Like SILENT, but also show a React Native alert window. */
   ALERT,
-  /** Raise an FSDKEroor on error. */
+  /** Raise an FSDKError on error. */
   THROW
 }
 
-export class FSDKError extends Error {  
+export class FSDKError extends Error {
 
-  constructor(message: string, public readonly errorCode: number, public readonly: Record<string, any>) { super(message); }
+  constructor(
+    message: string,
+    public readonly errorCode: number,
+    public readonly result: Record<string, any>
+  ) {
+    super(message);
+  }
 
 }
 
-const CONSTANTS = LuxandFaceSDK.getConstants();
-export const FACIAL_FEATURE_COUNT = Object.keys(CONSTANTS.FEATURE).length;
+export const FACIAL_FEATURE_COUNT = Object.keys(LuxandFaceSDK.FEATURE).length;
 
-function checkMatchingEnums<T extends Record<string, number | string>>(enum_: T, values: Record<string, number>) {
-  const enumKeys = Object.keys(enum_).filter(key => isNaN(Number(key)));
+function checkMatchingEnums<T extends Record<string, number | string>>(
+  name: string,
+  enum_: T,
+  values: Record<string, number>
+) {
+  const enumKeys = Object.keys(enum_).filter((key) => isNaN(Number(key)));
   const keys = Object.keys(values);
 
-  const missingKeys = keys.filter(item => !enumKeys.includes(item));
-  const extraKeys = enumKeys.filter(item => !keys.includes(item));
+  const missingKeys = keys.filter((item) => !enumKeys.includes(item));
+  const extraKeys = enumKeys.filter((item) => !keys.includes(item));
 
   if (missingKeys.length > 0 || extraKeys.length > 0) {
-    console.warn(`FSDK: items missmatch in ${enum_.name}. Missing keys: ${JSON.stringify(missingKeys)}. Extra keys: ${JSON.stringify(extraKeys)}`);
+    console.warn(
+      `FSDK: items mismatch in ${name}. Missing keys: ${JSON.stringify(missingKeys)}. Extra keys: ${JSON.stringify(extraKeys)}`
+    );
     return;
   }
 
   for (const key of enumKeys)
     if (enum_[key] !== values[key])
-      console.warn(`FSDK: items missmatch in ${enum_.name}. ${enum_[key]} != ${values[key]} for ${key}.`);
+      console.warn(
+        `FSDK: items mismatch in ${name}. ${enum_[key]} != ${values[key]} for ${key}.`
+      );
 }
 
-checkMatchingEnums(ERROR, CONSTANTS.ERROR);
-checkMatchingEnums(IMAGEMODE, CONSTANTS.IMAGEMODE);
-checkMatchingEnums(VIDEOCOMPRESSIONTYPE, CONSTANTS.VIDEOCOMPRESSIONTYPE);
-checkMatchingEnums(FEATURE, CONSTANTS.FEATURE);
+checkMatchingEnums('ERROR', ERROR, LuxandFaceSDK.ERROR);
+checkMatchingEnums('IMAGEMODE', IMAGEMODE, LuxandFaceSDK.IMAGEMODE);
+checkMatchingEnums(
+  'VIDEOCOMPRESSIONTYPE',
+  VIDEOCOMPRESSIONTYPE,
+  LuxandFaceSDK.VIDEOCOMPRESSIONTYPE
+);
+checkMatchingEnums('FEATURE', FEATURE, LuxandFaceSDK.FEATURE);
 
-export type FacialAttribute = 
+export type FacialAttribute =
   'Age'         |
   'AgeGroups'   |
   'Gender'      |
@@ -178,57 +195,50 @@ export type TrackerFacialAttribute =
   'ImageQuality' |
   'Confidence';
 
-export type Parameter = 
-  'FaceDetectionModel'                   |
-  'FaceDetection2Model'                  |
-  'FaceRecognition2Model'                |
-  'FaceDetection2Threshold'              |
-  'FaceDetection2BatchSize'              |
-  'FaceRecognition2BatchSize'            |
-  'FaceDetection2PatchSize'              |
-  'FaceDetection2PatchMode'              |
-  'FaceDetection2BigFaceSize'            |
-  'FaceRecognition2UseFlipTest'          |
-  'LivenessModel'                        |
-  'TrimOutOfScreenFaces'                 |
-  'TrimFacesWithUncertainFacialFeatures' |
-  'ComputationDelegate'                  |
-  'PassiveLivenessComputationDelegate'   |
-  'FaceDetection2ComputationDelegate'    |
-  'FaceRecognition2ComputationDelegate';
+export type Parameter =
+  'FaceDetectionModel'                 |
+  'FaceRecognitionModel'               |
+  'FacialFeaturesModel'                |
+  'FaceDetectionThreshold'             |
+  'FaceDetectionBatchSize'             |
+  'FaceRecognitionBatchSize'           |
+  'FaceDetectionPatchSize'             |
+  'FaceDetectionPatchMode'             |
+  'FaceDetectionBigFaceSize'           |
+  'FaceRecognitionUseFlipTest'         |
+  'LivenessModel'                      |
+  'TrimOutOfScreenFaces'               |
+  'ComputationDelegate'                |
+  'PassiveLivenessComputationDelegate' |
+  'FaceDetectionComputationDelegate'   |
+  'FaceRecognitionComputationDelegate' |
+  'FacialFeaturesComputationDelegate'  |
+  'ModelNumThreads'                    |
+  'PassiveLivenessNumThreads'          |
+  'FaceDetectionNumThreads'            |
+  'FaceRecognitionNumThreads'          |
+  'FacialFeaturesNumThreads';
 
 export type TrackerParameter =
   Parameter |
-  'TrimFacesWithUncertainFacialFeatures'         |
   'VideoFeedDiscontinuity'                       |
-  'DetectionVersion'                             |
-  'ComputationDelegate'                          |
-  'PassiveLivenessComputationDelegate'           |
-  'FaceDetection2ComputationDelegate'            |
-  'FaceRecognition2ComputationDelegate'          |
-  'HandleArbitraryRotations'                     |
-  'DetermineFaceRotationAngle'                   |
-  'InternalResizeWidth'                          |
-  'FaceDetectionThreshold'                       |
   'DetectFaceOnceEvery'                          |
-  'FacialFeatureJitterSuppression'               |
   'RecognizeFaces'                               |
-  'DetectEyes'                                   |
   'DetectFacialFeatures'                         |
-  'RecognitionPrecision'                         |
   'DetectGender'                                 |
   'DetectExpression'                             |
   'DetectAge'                                    |
   'DetectAngles'                                 |
   'DetectLiveness'                               |
-  'SuppressMisdetectedFaces'                     |
-  'FacialFeatureDeviationThreshold'              |
   'KeepFaceImages'                               |
   'FaceTrackingDistance'                         |
   'Threshold'                                    |
   'Threshold2'                                   |
   'MemoryLimit'                                  |
   'Learning'                                     |
+  'SuppressMisdetectedFaces'                     |
+  'FacialFeatureJitterSuppression'               |
+  'FacialFeatureDeviationThreshold'              |
   'SmoothFacialFeatures'                         |
   'FacialFeatureSmoothingSpatial'                |
   'FacialFeatureSmoothingTemporal'               |
@@ -251,45 +261,40 @@ export type TrackerParameter =
 
 export type ParameterValue = string | number | boolean;
 export type Parameters<T extends Parameter> = Record<T, ParameterValue>;
-export type TrackerParameters<P extends TrackerParameter> = { [K in P]: ParameterValueType<K> };
+export type TrackerParameters<P extends TrackerParameter> = {
+  [K in P]: ParameterValueType<K>;
+};
 
 export type FlatType<T> = { [K in keyof T]: T[K] } & {};
 
 export type ParameterValueType<P extends TrackerParameter> = {
-  FaceDetectionModel: string,
   TrimOutOfScreenFaces: boolean,
-  TrimFacesWithUncertainFacialFeatures: boolean,
-  VideoFeedDiscontinuity: boolean,
-  DetectionVersion: number,
-  FaceDetection2Model: string,
-  FaceRecognition2Model: string,
-  FaceDetection2Threshold: number,
-  FaceDetection2BatchSize: number,
-  FaceDetection2PatchSize: number,
-  FaceDetection2PatchMode: 'fast' | 'mixed' | 'full',
-  FaceDetection2BigFaceSize: number,
-  FaceRecognition2UseFlipTest: boolean,
-  FaceRecognition2BatchSize: number,
-  ComputationDelegate:  'none' | 'cpu' | 'gpu' | 'nnapi',
-  PassiveLivenessComputationDelegate:  'none' | 'cpu' | 'gpu' | 'nnapi',
-  FaceDetection2ComputationDelegate:  'none' | 'cpu' | 'gpu' | 'nnapi',
-  FaceRecognition2ComputationDelegate:  'none' | 'cpu' | 'gpu' | 'nnapi',
-  HandleArbitraryRotations: boolean,
-  DetermineFaceRotationAngle: boolean,
-  InternalResizeWidth: number,
+  VideoFeedDiscontinuity: number[],
+  FaceDetectionModel: string,
+  FaceRecognitionModel: string,
+  FacialFeaturesModel: string,
   FaceDetectionThreshold: number,
-  DetectFaceOnceEvery: number,
+  FaceDetectionBatchSize: number,
+  FaceDetectionPatchSize: number,
+  FaceDetectionPatchMode: 'fast' | 'mixed' | 'full',
+  FaceDetectionBigFaceSize: number,
+  FaceRecognitionUseFlipTest: boolean,
+  FaceRecognitionBatchSize: number,
+  ComputationDelegate: 'none' | 'cpu' | 'gpu' | 'nnapi',
+  PassiveLivenessComputationDelegate: 'none' | 'cpu' | 'gpu' | 'nnapi',
+  FaceDetectionComputationDelegate: 'none' | 'cpu' | 'gpu' | 'nnapi',
+  FaceRecognitionComputationDelegate: 'none' | 'cpu' | 'gpu' | 'nnapi',
+  FacialFeaturesComputationDelegate: 'none' | 'cpu' | 'gpu' | 'nnapi',
   FacialFeatureJitterSuppression: number,
+  SuppressMisdetectedFaces: boolean,
+  DetectFaceOnceEvery: number,
   RecognizeFaces: boolean,
-  DetectEyes: boolean,
   DetectFacialFeatures: boolean,
-  RecognitionPrecision: number,
   DetectGender: boolean,
   DetectExpression: boolean,
   DetectAge: boolean,
   DetectAngles: boolean,
   DetectLiveness: boolean,
-  SuppressMisdetectedFaces: boolean,
   FacialFeatureDeviationThreshold: number,
   KeepFaceImages: boolean,
   FaceTrackingDistance: number,
@@ -317,4 +322,9 @@ export type ParameterValueType<P extends TrackerParameter> = {
   PrevFrameCount: number,
   DeleteCameras: number[],
   LivenessModel: string,
+  ModelNumThreads: number,
+  PassiveLivenessNumThreads: number,
+  FaceDetectionNumThreads: number,
+  FaceRecognitionNumThreads: number,
+  FacialFeaturesNumThreads: number,
 }[P];
