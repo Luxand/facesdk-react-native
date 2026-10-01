@@ -10,7 +10,19 @@ const root = path.resolve(__dirname, '..');
  *
  * @type {import('metro-config').MetroConfig}
  */
-module.exports = withMetroConfig(getDefaultConfig(__dirname), {
+const config = withMetroConfig(getDefaultConfig(__dirname), {
   root,
   dirname: __dirname,
+  conditions: ['react-native-facesdk-source'],
 });
+
+const gradleOutputs = /.*[\\/]android[\\/]build[\\/].*/;
+const blockList = config.resolver.blockList;
+
+config.resolver.blockList = Array.isArray(blockList)
+  ? [...blockList, gradleOutputs]
+  : blockList
+    ? [blockList, gradleOutputs]
+    : [gradleOutputs];
+
+module.exports = config;

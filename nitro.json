@@ -1,0 +1,41 @@
+{
+  "cxxNamespace": [
+    "luxandfacesdk"
+  ],
+  "ios": {
+    "iosModuleName": "FaceSDK"
+  },
+  "android": {
+    "androidNamespace": [
+      "luxandfacesdk"
+    ],
+    "androidCxxLibName": "LuxandFaceSDK"
+  },
+  "autolinking": {
+    "LuxandFaceSDK": {
+      "ios": {
+        "language": "c++",
+        "implementationClassName": "LuxandFaceSDKHybrid"
+      },
+      "android": {
+        "language": "c++",
+        "implementationClassName": "LuxandFaceSDKHybrid"
+      }
+    },
+    "FaceSDKPlatform": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "FaceSDKPlatform"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "FaceSDKPlatform"
+      }
+    }
+  },
+  "ignorePaths": [
+    "node_modules",
+    "example",
+    "lib"
+  ]
+}

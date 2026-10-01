@@ -1,43 +1,51 @@
-import { type Parameter, type ParameterValueType, type TrackerParameter } from "./definitions";
+import {
+  type Parameter,
+  type ParameterValueType,
+  type TrackerParameter,
+} from './definitions';
 
-export function getParametersString(parameters: string | { [key: string]: any }): string {
-  if (typeof parameters === 'string')
-    return parameters;
+export function getParametersString(
+  parameters: string | { [key: string]: any }
+): string {
+  if (typeof parameters === 'string') return parameters;
 
-  return (Object.keys(parameters) as Array<string>).map(e => `${e.toString()}=${parameters[e]}`).join(';');
+  return (Object.keys(parameters) as Array<string>)
+    .map((e) => `${e.toString()}=${parameters[e]}`)
+    .join(';');
 }
 
-export function getParameterValue<P extends Parameter | TrackerParameter>(value: string, parameter: P): ParameterValueType<P> {
+export function getParameterValue<P extends Parameter | TrackerParameter>(
+  value: string,
+  parameter: P
+): ParameterValueType<P> {
   value = value.trim();
 
   switch (parameter) {
     // string
-    case 'FaceDetection2Model':
     case 'FaceDetectionModel':
-    case 'FaceRecognition2Model':
+    case 'FaceRecognitionModel':
+    case 'FacialFeaturesModel':
     case 'LivenessModel':
 
     // 'fast' | 'mixed' | 'full'
-    case 'FaceDetection2PatchMode':
+    case 'FaceDetectionPatchMode':
 
     // Delegate
     case 'ComputationDelegate':
-    case 'FaceDetection2ComputationDelegate':
-    case 'FaceRecognition2ComputationDelegate':
     case 'PassiveLivenessComputationDelegate':
+    case 'FaceDetectionComputationDelegate':
+    case 'FaceRecognitionComputationDelegate':
+    case 'FacialFeaturesComputationDelegate':
       return value as any;
 
     case 'ContinuousVideoFeed':
     case 'DetectAge':
     case 'DetectAngles':
     case 'DetectExpression':
-    case 'DetectEyes':
     case 'DetectFacialFeatures':
     case 'DetectGender':
     case 'DetectLiveness':
-    case 'DetermineFaceRotationAngle':
-    case 'FaceRecognition2UseFlipTest':
-    case 'HandleArbitraryRotations':
+    case 'FaceRecognitionUseFlipTest':
     case 'KeepFaceImages':
     case 'Learning':
     case 'PurgeIDReassignment':
@@ -48,9 +56,7 @@ export function getParameterValue<P extends Parameter | TrackerParameter>(value:
     case 'SmoothAttributeLiveness':
     case 'SmoothFacialFeatures':
     case 'SuppressMisdetectedFaces':
-    case 'TrimFacesWithUncertainFacialFeatures':
     case 'TrimOutOfScreenFaces':
-    case 'VideoFeedDiscontinuity':
       return (value.toLowerCase() === 'true') as any;
 
     case 'AttributeAgeSmoothingSpatial':
@@ -61,28 +67,32 @@ export function getParameterValue<P extends Parameter | TrackerParameter>(value:
     case 'AttributeExpressionSmileSmoothingTemporal':
     case 'AttributeLivenessSmoothingAlpha':
     case 'DetectFaceOnceEvery':
-    case 'DetectionVersion':
-    case 'FaceDetection2BatchSize':
-    case 'FaceDetection2BigFaceSize':
-    case 'FaceDetection2PatchSize':
-    case 'FaceDetection2Threshold':
+    case 'FaceDetectionBatchSize':
+    case 'FaceDetectionBigFaceSize':
+    case 'FaceDetectionNumThreads':
+    case 'FaceDetectionPatchSize':
     case 'FaceDetectionThreshold':
-    case 'FaceRecognition2BatchSize':
+    case 'FaceRecognitionBatchSize':
+    case 'FaceRecognitionNumThreads':
     case 'FaceTrackingDistance':
     case 'FacialFeatureDeviationThreshold':
     case 'FacialFeatureJitterSuppression':
     case 'FacialFeatureSmoothingSpatial':
     case 'FacialFeatureSmoothingTemporal':
-    case 'InternalResizeWidth':
+    case 'FacialFeaturesNumThreads':
     case 'LivenessFramesCount':
     case 'MemoryLimit':
+    case 'ModelNumThreads':
+    case 'PassiveLivenessNumThreads':
     case 'PrevFrameCount':
-    case 'RecognitionPrecision':
     case 'Threshold':
     case 'Threshold2':
       return (value === '' ? 0 : Number.parseFloat(value)) as any;
 
     case 'DeleteCameras':
-      return value.split(',').map(e => Number.parseInt(e.trim())) as any;
+    case 'VideoFeedDiscontinuity':
+      return value
+        .split(',')
+        .map((e) => Number.parseInt(e.trim(), 10)) as any;
   }
 }
