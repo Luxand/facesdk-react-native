@@ -88,6 +88,8 @@ public:
   NumberResult GetTrackerFaceImage(double tracker, double faceID) override;
   VoidResult SetTrackerFaceImage(double tracker, double faceID, double image) override;
   VoidResult DeleteTrackerFaceImage(double tracker, double faceID) override;
+  FeaturesResult GetTrackerFaceFeatures(double tracker, double faceID) override;
+  VoidResult SetTrackerFaceFeatures(double tracker, double faceID, const std::vector<Point>& features) override;
   TrackerIDResult TrackerCreateID(double tracker, const std::shared_ptr<ArrayBuffer>& faceTemplate) override;
   NumberResult AddTrackerFaceTemplate(double tracker, double id, const std::shared_ptr<ArrayBuffer>& faceTemplate) override;
   VoidResult DeleteTrackerFace(double tracker, double faceID) override;

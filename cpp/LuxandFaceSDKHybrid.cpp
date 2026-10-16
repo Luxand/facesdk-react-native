@@ -919,6 +919,26 @@ VoidResult LuxandFaceSDKHybrid::DeleteTrackerFaceImage(double tracker, double fa
                                           static_cast<long long>(faceID)));
 }
 
+FeaturesResult LuxandFaceSDKHybrid::GetTrackerFaceFeatures(double tracker, double faceID) {
+  TPoint features[5]{};
+  const int errorCode = FSDK_GetTrackerFaceFeatures(
+      static_cast<HTracker>(tracker), static_cast<long long>(faceID), features);
+  return some<FeaturesResult>(errorCode, toPoints(features, 5));
+}
+
+VoidResult LuxandFaceSDKHybrid::SetTrackerFaceFeatures(double tracker, double faceID,
+                                           const std::vector<Point>& features) {
+  if (features.size() != 5) {
+    return none(FSDKE_INVALID_ARGUMENT);
+  }
+  TPoint points[5];
+  for (size_t i = 0; i < 5; ++i) {
+    points[i] = fromPoint(features[i]);
+  }
+  return none(FSDK_SetTrackerFaceFeatures(static_cast<HTracker>(tracker),
+                                          static_cast<long long>(faceID), points));
+}
+
 TrackerIDResult LuxandFaceSDKHybrid::TrackerCreateID(
     double tracker, const std::shared_ptr<ArrayBuffer>& faceTemplate) {
   FSDK_FaceTemplate value = toFaceTemplate(faceTemplate);

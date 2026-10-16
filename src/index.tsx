@@ -1028,6 +1028,27 @@ export class Tracker extends FSDKObject {
     );
   }
 
+  /** Get the 5 facial key points of the face image stored for a face id, in the coordinates of that image. */
+  public getFaceFeatures(faceID: number): Point[] {
+    return executeSDKFunction(
+      'GetTrackerFaceFeatures',
+      returnFeatures,
+      this.handle,
+      faceID
+    );
+  }
+
+  /** Replace the 5 facial key points of the face image stored for a face id. */
+  public setFaceFeatures(faceID: number, features: Point[]): void {
+    return executeSDKFunction(
+      'SetTrackerFaceFeatures',
+      returnVoid,
+      this.handle,
+      faceID,
+      features
+    );
+  }
+
   /** Create a new id from a face template. */
   public createID(template: FaceTemplate): TrackerID {
     return executeSDKFunction(

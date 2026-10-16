@@ -321,6 +321,8 @@ int _FSDKIMPORT_ FSDK_GetTrackerIDByFaceID(HTracker Tracker, long long FaceID, l
 int _FSDKIMPORT_ FSDK_GetTrackerFaceTemplate(HTracker Tracker, long long FaceID, FSDK_FaceTemplate * FaceTemplate);
 int _FSDKIMPORT_ FSDK_GetTrackerFaceImage(HTracker Tracker, long long FaceID, HImage * FaceImage);
 int _FSDKIMPORT_ FSDK_SetTrackerFaceImage(HTracker Tracker, long long FaceID, HImage FaceImage);
+int _FSDKIMPORT_ FSDK_GetTrackerFaceFeatures(HTracker Tracker, long long FaceID, TPoint* Features);
+int _FSDKIMPORT_ FSDK_SetTrackerFaceFeatures(HTracker Tracker, long long FaceID, const TPoint* Features);
 int _FSDKIMPORT_ FSDK_DeleteTrackerFaceImage(HTracker Tracker, long long FaceID);
 int _FSDKIMPORT_ FSDK_DeleteTrackerFace(HTracker Tracker, long long FaceID);
 int _FSDKIMPORT_ FSDK_TrackerCreateID(HTracker Tracker, FSDK_FaceTemplate * FaceTemplate, long long * ID, long long * FaceID);

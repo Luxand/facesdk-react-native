@@ -277,6 +277,12 @@ export interface LuxandFaceSDK extends HybridObject<{
     image: number
   ): VoidResult;
   DeleteTrackerFaceImage(tracker: number, faceID: number): VoidResult;
+  GetTrackerFaceFeatures(tracker: number, faceID: number): FeaturesResult;
+  SetTrackerFaceFeatures(
+    tracker: number,
+    faceID: number,
+    features: Point[]
+  ): VoidResult;
   TrackerCreateID(tracker: number, faceTemplate: ArrayBuffer): TrackerIDResult;
   AddTrackerFaceTemplate(
     tracker: number,

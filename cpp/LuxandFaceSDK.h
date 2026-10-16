@@ -259,7 +259,7 @@ int _FSDKIMPORT_ FSDK_GrabFrame(int CameraHandle, HImage * Image);
 int _FSDKIMPORT_ FSDK_InitializeCapturing(void);
 int _FSDKIMPORT_ FSDK_FinalizeCapturing(void);
 
-#if defined( _WIN32 ) || defined ( _WIN64 )
+#if defined( _WIN32 ) || defined ( _WIN64 ) || defined( __linux__ )
 typedef struct {
 	int Width;
 	int Height;
@@ -270,13 +270,25 @@ int _FSDKIMPORT_ FSDK_SetCameraNaming(bool UseDevicePathAsName);
 #else
 int _FSDKIMPORT_ FSDK_SetCameraNaming_uchar(unsigned char UseDevicePathAsName);
 #endif
+int _FSDKIMPORT_ FSDK_FreeVideoFormatList(FSDK_VideoFormatInfo * VideoFormatList);
+#endif
+
+#if defined( _WIN32 ) || defined ( _WIN64 )
 int _FSDKIMPORT_ FSDK_GetCameraList(wchar_t *** CameraList, int * CameraCount);
 int _FSDKIMPORT_ FSDK_GetCameraListEx(wchar_t *** CameraNameList, wchar_t *** CameraDevicePathList, int * CameraCount);
 int _FSDKIMPORT_ FSDK_FreeCameraList(wchar_t ** CameraList, int CameraCount);
 int _FSDKIMPORT_ FSDK_GetVideoFormatList(const wchar_t * CameraName, FSDK_VideoFormatInfo ** VideoFormatList, int * VideoFormatCount);
-int _FSDKIMPORT_ FSDK_FreeVideoFormatList(FSDK_VideoFormatInfo * VideoFormatList);
 int _FSDKIMPORT_ FSDK_SetVideoFormat(const wchar_t * CameraName, FSDK_VideoFormatInfo VideoFormat);
 int _FSDKIMPORT_ FSDK_OpenVideoCamera(const wchar_t * CameraName, int * CameraHandle);
+#endif
+
+#if defined( __linux__ )
+int _FSDKIMPORT_ FSDK_GetCameraList(char *** CameraList, int * CameraCount);
+int _FSDKIMPORT_ FSDK_GetCameraListEx(char *** CameraNameList, char *** CameraDevicePathList, int * CameraCount);
+int _FSDKIMPORT_ FSDK_FreeCameraList(char ** CameraList, int CameraCount);
+int _FSDKIMPORT_ FSDK_GetVideoFormatList(const char * CameraName, FSDK_VideoFormatInfo ** VideoFormatList, int * VideoFormatCount);
+int _FSDKIMPORT_ FSDK_SetVideoFormat(const char * CameraName, FSDK_VideoFormatInfo VideoFormat);
+int _FSDKIMPORT_ FSDK_OpenVideoCamera(const char * CameraName, int * CameraHandle);
 #endif
 
 // Tracker
@@ -321,6 +333,8 @@ int _FSDKIMPORT_ FSDK_GetTrackerIDByFaceID(HTracker Tracker, long long FaceID, l
 int _FSDKIMPORT_ FSDK_GetTrackerFaceTemplate(HTracker Tracker, long long FaceID, FSDK_FaceTemplate * FaceTemplate);
 int _FSDKIMPORT_ FSDK_GetTrackerFaceImage(HTracker Tracker, long long FaceID, HImage * FaceImage);
 int _FSDKIMPORT_ FSDK_SetTrackerFaceImage(HTracker Tracker, long long FaceID, HImage FaceImage);
+int _FSDKIMPORT_ FSDK_GetTrackerFaceFeatures(HTracker Tracker, long long FaceID, TPoint* Features);
+int _FSDKIMPORT_ FSDK_SetTrackerFaceFeatures(HTracker Tracker, long long FaceID, const TPoint* Features);
 int _FSDKIMPORT_ FSDK_DeleteTrackerFaceImage(HTracker Tracker, long long FaceID);
 int _FSDKIMPORT_ FSDK_DeleteTrackerFace(HTracker Tracker, long long FaceID);
 int _FSDKIMPORT_ FSDK_TrackerCreateID(HTracker Tracker, FSDK_FaceTemplate * FaceTemplate, long long * ID, long long * FaceID);
