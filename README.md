@@ -30,6 +30,8 @@ For iOS, install the pods:
 cd ios && pod install
 ```
 
+The package includes `LuxandFaceSDK.xcframework`, `IBetaPlugin.xcframework`, and `FaceSdk.xcframework`, each with an arm64 iOS device slice and an arm64/x86_64 iOS Simulator slice. No separate binary download is required. CocoaPods selects the slice for the build target.
+
 ### Camera support (optional)
 
 Frame processing is only needed if you feed camera frames to the Tracker. It requires three further peer dependencies:
@@ -206,7 +208,7 @@ at once, overriding the per-model parameters above.
 
 ## iBeta Certified Liveness Add-on
 
-This package bundles the [iBeta Certified Liveness add-on](https://www.luxand.com/facesdk/documentation/certifiedliveness.php): the plugin binaries for all four Android ABIs, the iOS framework, and the model data (~26 MB per platform).
+This package bundles the [iBeta Certified Liveness add-on](https://www.luxand.com/facesdk/documentation/certifiedliveness.php): the plugin binaries for all four Android ABIs, the iOS XCFrameworks, and the model data (~26 MB per platform).
 
 Initialize it once, after `FSDK.Initialize()`:
 

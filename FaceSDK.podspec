@@ -22,15 +22,17 @@ Pod::Spec.new do |s|
     "cpp/**/*.{hpp,cpp}",
   ]
 
+  # Vendored headers belong to the selected XCFramework slice, not the pod sources.
+  s.exclude_files       = 'ios/Frameworks/**/*.{h,hpp,m,mm,swift}'
   s.preserve_paths      = 'ios/Frameworks/**/*'
   # The iBeta liveness models, copied into the app bundle so InitializeIBeta can extract them
   # into the caches directory at runtime. Android ships the same tree under android assets.
   s.resources           = 'ios/data'
   # IBetaPlugin is dlopened by LuxandFaceSDK at runtime and links against IDRnD's FaceSdk, so all three
   # have to ship even though only LuxandFaceSDK is linked at build time.
-  s.vendored_frameworks = 'ios/Frameworks/LuxandFaceSDK.framework',
-                          'ios/Frameworks/IBetaPlugin.framework',
-                          'ios/Frameworks/FaceSdk.framework'
+  s.vendored_frameworks = 'ios/Frameworks/LuxandFaceSDK.xcframework',
+                          'ios/Frameworks/IBetaPlugin.xcframework',
+                          'ios/Frameworks/FaceSdk.xcframework'
   s.pod_target_xcconfig = {
     "OTHER_LDFLAGS" => "-framework LuxandFaceSDK"
   }
